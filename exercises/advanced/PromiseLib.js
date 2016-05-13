@@ -46,9 +46,17 @@ var promisify = function(nodeStyleFn) {
 
 var all = function(arrayOfPromises) {
   // TODO
+  var promisesReturned = 0;
+  var n = arrayOfPromises.length;
   return new Promise((resolve, reject) => {
-    arrayOfPromises.map(promise => {
-      promise.then()
+    var mappedArray = [];
+    arrayOfPromises.forEach((promise, index) => {
+      promise.then((result) => {
+        mappedArray[index] = result;
+        if (++promisesReturned === n) {
+          resolve(mappedArray);
+        }
+      }).catch((err) => reject(err));
     });
   });
 };
@@ -62,6 +70,11 @@ var all = function(arrayOfPromises) {
 
 var race = function(arrayOfPromises) {
   // TODO
+  return new Promise((resolve, reject) => {
+    arrayOfPromises.forEach(promise => {
+      promise.then(result => resolve(result)).catch(err => reject(err));
+    });
+  });
 };
 
 // Export these functions so we can unit test them

@@ -15,6 +15,7 @@ describe('PromiseLib', function() {
 
     it('should make file content available in the `then` block', function(done) {
       var readFileAsync = PromiseLib.promisify(fs.readFile);
+      console.log('#####################################', readFileAsync);
       var filePath = __dirname + '/../files/file_to_read.txt';
 
       readFileAsync(filePath)

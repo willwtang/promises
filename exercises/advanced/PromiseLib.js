@@ -16,6 +16,20 @@ var Promise = require('bluebird');
 
 var promisify = function(nodeStyleFn) {
  // TODO
+  return function() {
+    var args = Array.prototype.slice.call(arguments, 0);
+    return new Promise((resolve, reject) => {
+      var callback = function(err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve.apply(null, Array.prototype.slice.call(arguments, 1));
+      };
+      args.push(callback);
+      nodeStyleFn.apply(null, args);
+    });
+  };
 };
 
 
@@ -32,6 +46,11 @@ var promisify = function(nodeStyleFn) {
 
 var all = function(arrayOfPromises) {
   // TODO
+  return new Promise((resolve, reject) => {
+    arrayOfPromises.map(promise => {
+      promise.then()
+    });
+  });
 };
 
 
